@@ -15,6 +15,6 @@ open class LauncherCache(
     }
 
     fun getPackages(): List<PsiPackage> {
-        return listOf(LauncherPackageGenerator.createLauncherPackage(project))
+        return listOf(LauncherPackageGenerator.createLauncherPackage(project, "launcher"))
     }
 }

@@ -32,8 +32,8 @@ class LauncherPackageFinder(project: Project) : PsiElementFinder() {
             CachedValueProvider.Result.create(map, modificationTracker)
         }
 
-        PsiManager.getInstance(launcherCache.project)
-            .addPsiTreeChangeListener(LauncherChangeListener(modificationTracker), launcherCache.project)
+//        PsiManager.getInstance(launcherCache.project)
+//            .addPsiTreeChangeListener(LauncherChangeListener(modificationTracker), launcherCache.project)
     }
 
     override fun findClass(qualifiedName: String, scope: GlobalSearchScope): PsiClass? {

@@ -14,7 +14,8 @@ class LauncherClassFinder(project: Project) : PsiElementFinder() {
     private val modificationTracker = LauncherModificationTracker.getInstance(project)
 
     private val classCached: CachedValue<List<PsiClass>>
-    private val fqnClassCached: CachedValue<Map<String, PsiClass>>
+
+    private val fqnClassCached: CachedValue<Map<String, List<PsiClass>>>
     private val packageCached: CachedValue<Map<String, List<PsiClass>>>
 
     init {
@@ -25,7 +26,7 @@ class LauncherClassFinder(project: Project) : PsiElementFinder() {
             CachedValueProvider.Result.create(classes, modificationTracker)
         }
         fqnClassCached = cachedValuesManager.createCachedValue {
-            val map = classCached.value.associateBy { it.qualifiedName ?: "ToT" }
+            val map = classCached.value.groupBy { it.qualifiedName ?: "ToT" }
             CachedValueProvider.Result.create(map, modificationTracker)
         }
 
@@ -34,12 +35,12 @@ class LauncherClassFinder(project: Project) : PsiElementFinder() {
             CachedValueProvider.Result.create(map, modificationTracker)
         }
 
-        PsiManager.getInstance(launcherCache.project)
-            .addPsiTreeChangeListener(LauncherChangeListener(modificationTracker), launcherCache.project)
+//        PsiManager.getInstance(launcherCache.project)
+//            .addPsiTreeChangeListener(LauncherChangeListener(modificationTracker), launcherCache.project)
     }
 
     override fun findClass(qualifiedName: String, scope: GlobalSearchScope): PsiClass? {
-        return fqnClassCached.value[qualifiedName]
+        return fqnClassCached.value[qualifiedName]?.firstOrNull()
     }
 
     override fun findClasses(qualifiedName: String, scope: GlobalSearchScope): Array<PsiClass> {
@@ -47,10 +48,13 @@ class LauncherClassFinder(project: Project) : PsiElementFinder() {
         return arrayOf(c)
     }
 
-    // for `*` import
     override fun getClasses(psiPackage: PsiPackage, scope: GlobalSearchScope): Array<PsiClass> {
         val packages = packageCached.value[psiPackage.qualifiedName]
 
         return packages?.toTypedArray() ?: PsiClass.EMPTY_ARRAY
+    }
+
+    override fun findPackage(qualifiedName: String): PsiPackage? {
+        return null
     }
 }
