@@ -4,7 +4,6 @@ import com.github.sodp5.intellijpluginsample.services.MyProjectService
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElementFinder
-import com.intellij.psi.PsiManager
 import com.intellij.psi.PsiPackage
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.CachedValue
@@ -15,23 +14,21 @@ class LauncherPackageFinder(project: Project) : PsiElementFinder() {
     private val launcherCache: LauncherCache = MyProjectService.getInstance(project)
     private val modificationTracker = LauncherModificationTracker.getInstance(project)
 
-    private val packageCached: CachedValue<List<PsiPackage>>
-    private val fqnPackageCached: CachedValue<Map<String, PsiPackage>>
+    private val packageCached: CachedValue<Map<String, PsiPackage>>
 
     init {
         val cachedValuesManager = CachedValuesManager.getManager(launcherCache.project)
 
         packageCached = cachedValuesManager.createCachedValue {
-            val packages = launcherCache.getPackages()
+            val packages = launcherCache.getClasses()
+                .map { psiClass ->
+                    val packageName = psiClass.qualifiedName?.substringBeforeLast(".") ?: ""
+                    LauncherPackageGenerator.createLauncherPackage(project, packageName)
+                }
+                .associateBy { psiPackage -> psiPackage.qualifiedName }
 
             CachedValueProvider.Result.create(packages, modificationTracker)
         }
-
-        fqnPackageCached = cachedValuesManager.createCachedValue {
-            val map = packageCached.value.associateBy { it.qualifiedName }
-            CachedValueProvider.Result.create(map, modificationTracker)
-        }
-
 //        PsiManager.getInstance(launcherCache.project)
 //            .addPsiTreeChangeListener(LauncherChangeListener(modificationTracker), launcherCache.project)
     }
@@ -45,6 +42,6 @@ class LauncherPackageFinder(project: Project) : PsiElementFinder() {
     }
 
     override fun findPackage(qualifiedName: String): PsiPackage? {
-        return fqnPackageCached.value[qualifiedName]
+        return packageCached.value[qualifiedName]
     }
 }

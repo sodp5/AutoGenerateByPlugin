@@ -15,6 +15,8 @@
         <java.shortNamesCache implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherClassNameCache"/>
         <java.elementFinder implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherClassFinder"/>
         <java.elementFinder implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherPackageFinder"/>
+
+        <resolveScopeEnlarger implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherScopeEnlarger"/>
     </extensions>
 
     <applicationListeners>

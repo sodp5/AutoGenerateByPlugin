@@ -24,7 +24,7 @@ object LauncherPackageGenerator {
                         .createDirectory(project.guessProjectDir()!!)
 
                     val io = VfsUtilCore.virtualToIoFile(projectDir.subdirectories.first().virtualFile)
-                    val fakeDir = FakeDirectory(File(io, packageName))
+                    val fakeDir = FakeDirectory(File(io, packageName.replace('.', '/')))
 
                     return arrayOf(PsiDirectoryFactory.getInstance(project).createDirectory(fakeDir))
                 }
