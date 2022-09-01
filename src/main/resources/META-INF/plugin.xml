@@ -5,10 +5,16 @@
     <vendor>sodp5</vendor>
 
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationService serviceImplementation="com.github.sodp5.intellijpluginsample.services.MyApplicationService"/>
         <projectService serviceImplementation="com.github.sodp5.intellijpluginsample.services.MyProjectService"/>
+
+        <java.shortNamesCache implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherClassNameCache"/>
+        <java.elementFinder implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherClassFinder"/>
+        <java.elementFinder implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherPackageFinder"/>
     </extensions>
 
     <applicationListeners>
