@@ -16,25 +16,12 @@ class LauncherClassNameCache(project: Project) : ShortClassNamesCache() {
     private val launcherCache = MyProjectService.getInstance(project)
     private val modificationTracker = LauncherModificationTracker.getInstance(project)
 
-    private val launcherClassCachedValue: CachedValue<Map<String, List<PsiClass>>>
-    private val launcherPackageCachedValue: CachedValue<Map<String, List<PsiPackage>>>
-
-    init {
-        launcherClassCachedValue = CachedValuesManager.getManager(launcherCache.project)
-            .createCachedValue {
-                val classes = launcherCache.getClasses()
-                val shortName = classes.groupBy { it.name ?: "ToT" }
-                CachedValueProvider.Result.create(shortName, modificationTracker)
-            }
-
-        launcherPackageCachedValue = CachedValuesManager.getManager(launcherCache.project)
-            .createCachedValue {
-                val packages = launcherCache.getPackages()
-                val shortName = packages.groupBy { it.name ?: "ToT" }
-
-                CachedValueProvider.Result.create(shortName, modificationTracker)
-            }
-    }
+    private val launcherClassCachedValue: CachedValue<Map<String, List<PsiClass>>> = CachedValuesManager.getManager(launcherCache.project)
+        .createCachedValue {
+            val classes = launcherCache.getClasses()
+            val shortName = classes.groupBy { it.name ?: "ToT" }
+            CachedValueProvider.Result.create(shortName, modificationTracker)
+        }
 
     override fun getClassesByName(name: String, scope: GlobalSearchScope): Array<PsiClass> {
         modificationTracker.incModificationCount()
