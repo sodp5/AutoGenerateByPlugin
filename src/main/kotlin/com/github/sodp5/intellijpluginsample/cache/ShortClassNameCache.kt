@@ -1,4 +1,4 @@
-package com.github.sodp5.intellijpluginsample.launcher
+package com.github.sodp5.intellijpluginsample.cache
 
 import com.intellij.psi.PsiField
 import com.intellij.psi.PsiMethod

@@ -1,11 +1,10 @@
-package com.github.sodp5.intellijpluginsample.launcher
+package com.github.sodp5.intellijpluginsample.cache
 
+import com.github.sodp5.intellijpluginsample.tracker.LauncherModificationTracker
 import com.github.sodp5.intellijpluginsample.services.MyProjectService
 import com.intellij.openapi.project.Project
 import com.intellij.psi.*
-import com.intellij.psi.impl.file.PsiPackageImpl
 import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.psi.util.CachedValue
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.util.Processor

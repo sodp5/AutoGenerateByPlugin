@@ -13,11 +13,11 @@
 <!--        <applicationService serviceImplementation="com.github.sodp5.intellijpluginsample.services.MyApplicationService"/>-->
         <projectService serviceImplementation="com.github.sodp5.intellijpluginsample.services.MyProjectService"/>
 
-        <java.shortNamesCache implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherClassNameCache"/>
-        <java.elementFinder implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherClassFinder"/>
-        <java.elementFinder implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherPackageFinder"/>
+        <java.shortNamesCache implementation="com.github.sodp5.intellijpluginsample.cache.LauncherClassNameCache"/>
+        <java.elementFinder implementation="com.github.sodp5.intellijpluginsample.finder.LauncherClassFinder"/>
+        <java.elementFinder implementation="com.github.sodp5.intellijpluginsample.finder.LauncherPackageFinder"/>
 
-<!--        <resolveScopeEnlarger implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherScopeEnlarger"/>-->
+<!--        <resolveScopeEnlarger implementation="com.github.sodp5.intellijpluginsample.finder.LauncherScopeEnlarger"/>-->
     </extensions>
 
     <applicationListeners>

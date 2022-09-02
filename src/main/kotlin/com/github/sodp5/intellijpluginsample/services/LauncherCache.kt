@@ -1,5 +1,6 @@
-package com.github.sodp5.intellijpluginsample.launcher
+package com.github.sodp5.intellijpluginsample.services
 
+import com.github.sodp5.intellijpluginsample.psi.LauncherClassGenerator
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiClass
 

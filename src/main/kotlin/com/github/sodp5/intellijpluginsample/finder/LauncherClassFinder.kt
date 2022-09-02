@@ -1,5 +1,7 @@
-package com.github.sodp5.intellijpluginsample.launcher
+package com.github.sodp5.intellijpluginsample.finder
 
+import com.github.sodp5.intellijpluginsample.services.LauncherCache
+import com.github.sodp5.intellijpluginsample.tracker.LauncherModificationTracker
 import com.github.sodp5.intellijpluginsample.services.MyProjectService
 import com.intellij.openapi.project.Project
 import com.intellij.psi.*
@@ -7,7 +9,6 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.CachedValue
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
-import org.jetbrains.kotlin.idea.core.getPackage
 
 class LauncherClassFinder(project: Project) : PsiElementFinder() {
     private val launcherCache: LauncherCache = MyProjectService.getInstance(project)

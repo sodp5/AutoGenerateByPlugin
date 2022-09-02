@@ -1,4 +1,4 @@
-package com.github.sodp5.intellijpluginsample.launcher
+package com.github.sodp5.intellijpluginsample.tracker
 
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project

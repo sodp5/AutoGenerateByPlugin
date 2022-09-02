@@ -1,11 +1,9 @@
-package com.github.sodp5.intellijpluginsample.launcher
+package com.github.sodp5.intellijpluginsample.psi
 
 import com.android.tools.idea.util.toIoFile
 import com.google.common.collect.Maps
 import com.intellij.facet.ProjectFacetManager
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.project.guessProjectDir
-import com.intellij.openapi.vfs.VfsUtilCore
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiManager
 import com.intellij.psi.PsiPackage

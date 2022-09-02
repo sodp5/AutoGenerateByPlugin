@@ -1,4 +1,4 @@
-package com.github.sodp5.intellijpluginsample.launcher
+package com.github.sodp5.intellijpluginsample.tracker
 
 class LauncherChangeListener(
     private val tracker: LauncherModificationTracker,
