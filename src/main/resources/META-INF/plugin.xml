@@ -7,16 +7,17 @@
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.java</depends>
+    <depends>org.jetbrains.android</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.sodp5.intellijpluginsample.services.MyApplicationService"/>
+<!--        <applicationService serviceImplementation="com.github.sodp5.intellijpluginsample.services.MyApplicationService"/>-->
         <projectService serviceImplementation="com.github.sodp5.intellijpluginsample.services.MyProjectService"/>
 
         <java.shortNamesCache implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherClassNameCache"/>
         <java.elementFinder implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherClassFinder"/>
         <java.elementFinder implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherPackageFinder"/>
 
-        <resolveScopeEnlarger implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherScopeEnlarger"/>
+<!--        <resolveScopeEnlarger implementation="com.github.sodp5.intellijpluginsample.launcher.LauncherScopeEnlarger"/>-->
     </extensions>
 
     <applicationListeners>
