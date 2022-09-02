@@ -6,9 +6,11 @@ import com.intellij.psi.PsiClass
 open class LauncherCache(
     val project: Project,
 ) {
+    private val classes = mutableListOf<PsiClass>().apply {
+        LauncherClassGenerator.getLauncher(project)?.let(::add)
+    }
+
     fun getClasses(): List<PsiClass> {
-        return LauncherClassGenerator.getLauncher(project)?.let {
-            listOf(it)
-        } ?: emptyList()
+        return classes
     }
 }
