@@ -1,6 +1,6 @@
 # AutoGenerateByPlugin
 
-Annotation 기반으로 찾은 요소를 기반으로 파일을 자동으로 생성하는 Plugin<br>
+Annotation 기반으로 찾은 요소를 기반으로 파일을 자동으로 생성하는 Intellij Plugin<br>
 
 ## When To Use
 - KSP혹은 AnnotationProcessor등의 CodeGenerator의 결과물을 빌드 하기 전에 참조할 수 있다.<br>
