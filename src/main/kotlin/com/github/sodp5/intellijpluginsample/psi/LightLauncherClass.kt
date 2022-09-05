@@ -1,37 +1,29 @@
 package com.github.sodp5.intellijpluginsample.psi
 
-import com.android.tools.idea.projectsystem.getModuleSystem
-import com.intellij.facet.ProjectFacetManager
+import com.android.tools.idea.kotlin.psiType
+import com.github.sodp5.intellijpluginsample.util.AnnotationSearchUtil
 import com.intellij.ide.highlighter.JavaFileType
 import com.intellij.lang.java.JavaLanguage
 import com.intellij.psi.*
 import com.intellij.psi.impl.light.LightFieldBuilder
 import com.intellij.psi.impl.light.LightMethodBuilder
+import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.android.augment.AndroidLightClassBase
-import org.jetbrains.android.facet.AndroidFacet
+import org.jetbrains.kotlin.psi.KtProperty
 
 class LightLauncherClass(
-    private val psiManager: PsiManager,
+    psiManager: PsiManager,
+    private val lightLauncherClassConfig: LightLauncherClassConfig,
 ) : AndroidLightClassBase(psiManager, listOf(PsiModifier.FINAL, PsiModifier.PUBLIC)) {
-    private val packageName by lazy {
-        val facet = ProjectFacetManager.getInstance(project)
-            .getFacets(AndroidFacet.ID).firstOrNull {
-                it.module.name.substringAfterLast(".").equals("main", ignoreCase = true)
-            }
-
-        (facet?.getModuleSystem()?.getPackageName() ?: "") + ".launcher"
-    }
-    private val className = "ChannelLauncher"
-
     private val backingFile = PsiFileFactory.getInstance(project)
         .createFileFromText(
-            "$className.java",
+            "${lightLauncherClassConfig.className}.java",
             JavaFileType.INSTANCE,
             "// create by plugin"
         )
         .let { it as PsiJavaFile }
         .also {
-            it.packageName = packageName
+            it.packageName = lightLauncherClassConfig.packageName
         }
 
     override fun getContainingClass(): PsiClass? {
@@ -39,7 +31,7 @@ class LightLauncherClass(
     }
 
     override fun getQualifiedName(): String {
-        return "$packageName.$className"
+        return "${lightLauncherClassConfig.packageName}.${lightLauncherClassConfig.className}"
     }
 
     override fun getContainingFile(): PsiFile {
@@ -55,13 +47,31 @@ class LightLauncherClass(
     }
 
     override fun getFields(): Array<PsiField> {
-        val field = LightFieldBuilder(psiManager, "abc", PsiType.INT)
-            .setModifiers(PsiModifier.PUBLIC)
+        val fqn = "com.munny.dummyproject.annotations.LauncherExtraData"
+        val elements = AnnotationSearchUtil.getAnnotatedElements(
+            project,
+            fqn,
+            GlobalSearchScope.fileScope(
+                lightLauncherClassConfig.originalFile
+            )
+        )
 
-        return arrayOf(field)
+        return elements
+            .filterIsInstance<KtProperty>()
+            .mapNotNull {
+                println(it::class.java.canonicalName)
+                LightFieldBuilder(
+                    it.name ?: return@mapNotNull null,
+                    it.psiType ?: return@mapNotNull null,
+                    it
+                )
+                    .setModifiers(PsiModifier.PUBLIC)
+            }
+            .toList()
+            .toTypedArray()
     }
 
     override fun getName(): String {
-        return className
+        return lightLauncherClassConfig.className
     }
 }
