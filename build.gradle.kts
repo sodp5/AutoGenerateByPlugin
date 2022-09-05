@@ -33,9 +33,10 @@ kotlin {
 // Configure Gradle IntelliJ Plugin - read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
     pluginName.set(properties("pluginName"))
-    version.set(properties("platformVersion"))
+//    version.set(properties("platformVersion"))
     type.set(properties("platformType"))
 
+    localPath.set(properties("StudioRunPath"))
     // Plugin Dependencies. Uses `platformPlugins` property from the gradle.properties file.
     plugins.set(properties("platformPlugins").split(',').map(String::trim).filter(String::isNotEmpty))
 }
@@ -55,6 +56,10 @@ qodana {
 }
 
 tasks {
+    instrumentCode {
+        compilerVersion.set("212.5712.43")
+    }
+
     wrapper {
         gradleVersion = properties("gradleVersion")
     }
