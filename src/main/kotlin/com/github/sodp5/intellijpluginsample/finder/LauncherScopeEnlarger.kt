@@ -1,6 +1,6 @@
 package com.github.sodp5.intellijpluginsample.finder
 
-import com.github.sodp5.intellijpluginsample.services.MyProjectService
+import com.github.sodp5.intellijpluginsample.services.LauncherProjectService
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.ResolveScopeEnlarger
@@ -27,8 +27,8 @@ class LauncherScopeEnlarger : ResolveScopeEnlarger() {
     }
 
     private fun getLocalBindingScope(project: Project): GlobalSearchScope {
-        val cache = MyProjectService.getInstance(project)
-        val classes = cache.getClasses()
+        val launcherService = LauncherProjectService.getInstance(project)
+        val classes = launcherService.getClasses()
 
         val virtualFiles = classes.map { it.containingFile!!.viewProvider.virtualFile }
         val localScope = GlobalSearchScope.filesWithoutLibrariesScope(project, virtualFiles)

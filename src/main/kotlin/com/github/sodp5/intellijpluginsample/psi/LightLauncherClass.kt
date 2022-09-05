@@ -9,7 +9,6 @@ import com.intellij.psi.impl.light.LightFieldBuilder
 import com.intellij.psi.impl.light.LightMethodBuilder
 import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.android.augment.AndroidLightClassBase
-import org.jetbrains.kotlin.j2k.getContainingClass
 import org.jetbrains.kotlin.psi.KtProperty
 
 class LightLauncherClass(
@@ -23,10 +22,13 @@ class LightLauncherClass(
             "// create by plugin"
         )
         .let { it as PsiJavaFile }
-        .also {
-            it.packageName = lightLauncherClassConfig.packageName
-            navigationElement = lightLauncherClassConfig.originalFile
+        .also { file ->
+            file.packageName = lightLauncherClassConfig.packageName
         }
+
+    init {
+        navigationElement = lightLauncherClassConfig.psiFile
+    }
 
     override fun getContainingClass(): PsiClass? {
         return null
@@ -45,7 +47,7 @@ class LightLauncherClass(
             .setConstructor(true)
             .setModifiers(PsiModifier.PUBLIC)
             .apply {
-                navigationElement = lightLauncherClassConfig.originalFile
+                navigationElement = lightLauncherClassConfig.psiFile
             }
 
         return arrayOf(method)
@@ -57,7 +59,7 @@ class LightLauncherClass(
             project,
             fqn,
             GlobalSearchScope.fileScope(
-                lightLauncherClassConfig.originalFile
+                lightLauncherClassConfig.psiFile
             )
         )
 

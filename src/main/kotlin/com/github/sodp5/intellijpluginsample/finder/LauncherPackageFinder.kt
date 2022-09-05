@@ -1,9 +1,8 @@
 package com.github.sodp5.intellijpluginsample.finder
 
-import com.github.sodp5.intellijpluginsample.services.LauncherCache
-import com.github.sodp5.intellijpluginsample.tracker.LauncherModificationTracker
 import com.github.sodp5.intellijpluginsample.psi.LauncherPackageGenerator
-import com.github.sodp5.intellijpluginsample.services.MyProjectService
+import com.github.sodp5.intellijpluginsample.services.LauncherProjectService
+import com.github.sodp5.intellijpluginsample.tracker.LauncherModificationTracker
 import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiElementFinder
@@ -14,16 +13,16 @@ import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 
 class LauncherPackageFinder(project: Project) : PsiElementFinder() {
-    private val launcherCache: LauncherCache = MyProjectService.getInstance(project)
+    private val launcherService = LauncherProjectService.getInstance(project)
     private val modificationTracker = LauncherModificationTracker.getInstance(project)
 
     private val packageCached: CachedValue<Map<String, PsiPackage>>
 
     init {
-        val cachedValuesManager = CachedValuesManager.getManager(launcherCache.project)
+        val cachedValuesManager = CachedValuesManager.getManager(project)
 
         packageCached = cachedValuesManager.createCachedValue {
-            val packages = launcherCache.getClasses()
+            val packages = launcherService.getClasses()
                 .map { psiClass ->
                     val packageName = psiClass.qualifiedName?.substringBeforeLast(".") ?: ""
                     LauncherPackageGenerator.createLauncherPackage(project, packageName)

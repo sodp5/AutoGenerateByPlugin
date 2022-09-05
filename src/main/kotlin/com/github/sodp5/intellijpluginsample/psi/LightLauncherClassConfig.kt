@@ -5,5 +5,5 @@ import com.intellij.psi.PsiFile
 data class LightLauncherClassConfig(
     val className: String,
     val packageName: String,
-    val originalFile: PsiFile,
+    val psiFile: PsiFile,
 )

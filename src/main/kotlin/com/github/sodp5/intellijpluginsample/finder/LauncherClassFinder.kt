@@ -1,17 +1,18 @@
 package com.github.sodp5.intellijpluginsample.finder
 
-import com.github.sodp5.intellijpluginsample.services.LauncherCache
+import com.github.sodp5.intellijpluginsample.services.LauncherProjectService
 import com.github.sodp5.intellijpluginsample.tracker.LauncherModificationTracker
-import com.github.sodp5.intellijpluginsample.services.MyProjectService
 import com.intellij.openapi.project.Project
-import com.intellij.psi.*
+import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiElementFinder
+import com.intellij.psi.PsiPackage
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.CachedValue
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 
 class LauncherClassFinder(project: Project) : PsiElementFinder() {
-    private val launcherCache: LauncherCache = MyProjectService.getInstance(project)
+    private val launcherService = LauncherProjectService.getInstance(project)
     private val modificationTracker = LauncherModificationTracker.getInstance(project)
 
     private val classCached: CachedValue<List<PsiClass>>
@@ -20,12 +21,13 @@ class LauncherClassFinder(project: Project) : PsiElementFinder() {
     private val packageCached: CachedValue<Map<String, List<PsiClass>>>
 
     init {
-        val cachedValuesManager = CachedValuesManager.getManager(launcherCache.project)
+        val cachedValuesManager = CachedValuesManager.getManager(project)
 
         classCached = cachedValuesManager.createCachedValue {
-            val classes = launcherCache.getClasses()
+            val classes = launcherService.getClasses()
             CachedValueProvider.Result.create(classes, modificationTracker)
         }
+
         fqnClassCached = cachedValuesManager.createCachedValue {
             val map = classCached.value.groupBy { it.qualifiedName ?: "ToT" }
             CachedValueProvider.Result.create(map, modificationTracker)
@@ -35,9 +37,6 @@ class LauncherClassFinder(project: Project) : PsiElementFinder() {
             val map = classCached.value.groupBy { it.qualifiedName?.substringBeforeLast('.') ?: "ToT" }
             CachedValueProvider.Result.create(map, modificationTracker)
         }
-
-//        PsiManager.getInstance(launcherCache.project)
-//            .addPsiTreeChangeListener(LauncherChangeListener(modificationTracker), launcherCache.project)
     }
 
     override fun findClass(qualifiedName: String, scope: GlobalSearchScope): PsiClass? {

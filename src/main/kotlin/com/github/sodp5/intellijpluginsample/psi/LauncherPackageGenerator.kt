@@ -18,24 +18,19 @@ object LauncherPackageGenerator {
     private val layoutBindingPsiPackages = Maps.newConcurrentMap<String, PsiPackage>()
 
     fun createLauncherPackage(project: Project, packageName: String): PsiPackage {
-        val facet = ProjectFacetManager.getInstance(project)
-            .getFacets(AndroidFacet.ID)
-            .filter {
-                it.module.name.substringAfterLast(".").equals("main", ignoreCase = true)
+        val mainFacet = ProjectFacetManager.getInstance(project)
+            .getFacets(AndroidFacet.ID).firstOrNull {
+                it.module.name
+                    .substringAfterLast(".")
+                    .equals("main", ignoreCase = true)
             }
-            .firstOrNull()
-
-        SourceProviderManager.getInstance(facet!!)
-            .sources
-            .javaDirectories
-            .firstOrNull()
-
-
 
         return layoutBindingPsiPackages.computeIfAbsent(packageName) {
             object : PsiPackageImpl(PsiManager.getInstance(project), packageName) {
                 override fun isValid() = true
                 override fun getDirectories(): Array<PsiDirectory> {
+                    val facet = mainFacet ?: return emptyArray()
+
                     val io = SourceProviderManager.getInstance(facet)
                         .sources
                         .javaDirectories

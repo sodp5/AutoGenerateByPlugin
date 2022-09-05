@@ -1,28 +1,31 @@
 package com.github.sodp5.intellijpluginsample.cache
 
+import com.github.sodp5.intellijpluginsample.services.LauncherProjectService
 import com.github.sodp5.intellijpluginsample.tracker.LauncherModificationTracker
-import com.github.sodp5.intellijpluginsample.services.MyProjectService
 import com.intellij.openapi.project.Project
-import com.intellij.psi.*
+import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiField
+import com.intellij.psi.PsiMethod
 import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.search.PsiShortNamesCache
 import com.intellij.psi.util.CachedValueProvider
 import com.intellij.psi.util.CachedValuesManager
 import com.intellij.util.Processor
 
-class LauncherClassNameCache(project: Project) : ShortClassNamesCache() {
-    private val launcherCache = MyProjectService.getInstance(project)
+class LauncherClassNameCache(project: Project) : PsiShortNamesCache() {
+    private val launcherService = LauncherProjectService.getInstance(project)
     private val modificationTracker = LauncherModificationTracker.getInstance(project)
 
-    private val launcherClassCachedValue = CachedValuesManager.getManager(launcherCache.project)
+    private val launcherClassCachedValue = CachedValuesManager.getManager(project)
         .createCachedValue {
-            val classes = launcherCache.getClasses()
+            val classes = launcherService.getClasses()
             val shortName = classes.groupBy { it.name ?: "ToT" }
             CachedValueProvider.Result.create(shortName, modificationTracker)
         }
 
-    private val launcherMethodCached = CachedValuesManager.getManager(launcherCache.project)
+    private val launcherMethodCached = CachedValuesManager.getManager(project)
         .createCachedValue {
-            val allMethods = launcherCache.getClasses()
+            val allMethods = launcherService.getClasses()
                 .flatMap { psiClass -> psiClass.methods.asIterable() }
                 .groupBy { method -> method.name }
 
@@ -70,4 +73,11 @@ class LauncherClassNameCache(project: Project) : ShortClassNamesCache() {
     override fun getAllMethodNames(): Array<String> {
         return launcherMethodCached.value.keys.toTypedArray()
     }
+
+    override fun getAllFieldNames(): Array<String> = emptyArray()
+
+    override fun getFieldsByNameIfNotMoreThan(name: String, scope: GlobalSearchScope, maxCount: Int): Array<PsiField> =
+        PsiField.EMPTY_ARRAY
+
+    override fun getFieldsByName(name: String, scope: GlobalSearchScope): Array<PsiField> = PsiField.EMPTY_ARRAY
 }
