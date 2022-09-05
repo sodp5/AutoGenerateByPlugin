@@ -1,39 +1,27 @@
-# IntellijPluginSample
+# AutoGenerateByPlugin
 
-![Build](https://github.com/sodp5/IntellijPluginSample/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
+Annotation 기반으로 찾은 요소를 기반으로 파일을 자동으로 생성하는 Plugin
 
-## Template ToDo list
-- [x] Create a new [IntelliJ Platform Plugin Template][template] project.
-- [ ] Get familiar with the [template documentation][template].
-- [ ] Verify the [pluginGroup](./gradle.properties), [plugin ID](./src/main/resources/META-INF/plugin.xml) and [sources package](./src/main/kotlin).
-- [ ] Review the [Legal Agreements](https://plugins.jetbrains.com/docs/marketplace/legal-agreements.html).
-- [ ] [Publish a plugin manually](https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginTemplate) for the first time.
-- [ ] Set the Plugin ID in the above README badges.
-- [ ] Set the [Deployment Token](https://plugins.jetbrains.com/docs/marketplace/plugin-upload.html).
-- [ ] Click the <kbd>Watch</kbd> button on the top of the [IntelliJ Platform Plugin Template][template] to be notified about releases containing new features and fixes.
+## When To Use
+KSP혹은 AnnotationProcessor등의 CodeGenerator의 결과물을 빌드 하기 전에 참조할 수 있다.
+Build-Time 이전에 Error를 미리 발견할 수 있다.
 
-<!-- Plugin description -->
-This Fancy IntelliJ Platform Plugin is going to be your implementation of the brilliant ideas that you have.
+## How To Use
+특정 Annotation 을 찾아오도록 구현되어있기 때문에 사용하기 위해서는 해당 annotation을 적합한 full qualified name으로 수정해야한다.<br>
+(com.munny.dummyproject.annotations.LauncherExtraData, com.munny.dummyproject.annotations.Launcher)
 
-This specific section is a source for the [plugin.xml](/src/main/resources/META-INF/plugin.xml) file which will be extracted by the [Gradle](/build.gradle.kts) during the build process.
+[service](https://github.com/sodp5/AutoGenerateByPlugin/blob/main/src/main/kotlin/com/github/sodp5/intellijpluginsample/services/LauncherProjectService.kt)<br>
+[light class](https://github.com/sodp5/AutoGenerateByPlugin/blob/main/src/main/kotlin/com/github/sodp5/intellijpluginsample/psi/LightLauncherClass.kt)
 
-To keep everything working, do not remove `<!-- ... -->` sections. 
-<!-- Plugin description end -->
+## Preview
+<img width="424" alt="스크린샷 2022-09-05 오후 5 38 30" src="https://user-images.githubusercontent.com/37904970/188406546-4b604808-ce0a-4bd8-9262-07d1e27176de.png">
 
-## Installation
+<img width="455" alt="스크린샷 2022-09-05 오후 5 38 40" src="https://user-images.githubusercontent.com/37904970/188406553-0cf30f39-7528-43dc-a81e-b486d036cb7a.png">
 
-- Using IDE built-in plugin system:
-  
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "IntellijPluginSample"</kbd> >
-  <kbd>Install Plugin</kbd>
-  
-- Manually:
-
-  Download the [latest release](https://github.com/sodp5/IntellijPluginSample/releases/latest) and install it manually using
-  <kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
-
+## Reference
+https://cs.android.com/<br>
+https://plugins.jetbrains.com/docs/intellij/welcome.html<br>
+https://dealicious-inc.github.io/2021/08/23/android-studio-plugin-template.html<br>
 
 ---
 Plugin based on the [IntelliJ Platform Plugin Template][template].
